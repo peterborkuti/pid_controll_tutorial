@@ -44,8 +44,8 @@ void loop() {
     Serial.print("counter:");
     Serial.println(counter);
 
-    if (counter > setPoint) pwm--;
-    if (counter < setPoint) pwm++;
+    if (counter > setPoint) pwm -= 10;
+    if (counter < setPoint) pwm += 10;
 
     analogWrite(MOTORA1, pwm);
 
