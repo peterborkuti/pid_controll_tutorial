@@ -12,7 +12,7 @@
 #define MOTORA2 7
 
 volatile long counter = 0;
-int pwm = 100;
+int pwm = 10;
 
 void count() {
     counter++;
@@ -44,8 +44,9 @@ void loop() {
     Serial.print("counter:");
     Serial.println(counter);
 
-    if (counter > setPoint) pwm -= 10;
-    if (counter < setPoint) pwm += 10;
+    int err = setPoint - counter;
+
+    pwm += err;
 
     analogWrite(MOTORA1, pwm);
 
