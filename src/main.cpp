@@ -12,15 +12,10 @@
 #define MOTORA2 7
 
 volatile long counter = 0;
-int pwm = 0;
+int pwm = 100;
 
 void count() {
     counter++;
-}
-
-void setPWM() {
-    pwm = random(100, 255);
-    analogWrite(MOTORA1, pwm);
 }
 
 void setup() {
@@ -29,22 +24,32 @@ void setup() {
   pinMode(MOTORA1, OUTPUT);
   pinMode(MOTORA2, OUTPUT);
 
+  analogWrite(MOTORA1, pwm);
   digitalWrite(MOTORA2, LOW);
-  setPWM();
 
   attachInterrupt(digitalPinToInterrupt(ENCODER), count, RISING);
+
+  delay(500);
 }
 
+int setPoint = 15;
+
 void loop() {
+    Serial.print("SP:");
+    Serial.print(setPoint);
+    Serial.print(",");
+    Serial.print("PWM:");
     Serial.print(pwm);
     Serial.print(",");
+    Serial.print("counter:");
     Serial.println(counter);
 
-    counter = 0;
+    if (counter > setPoint) pwm--;
+    if (counter < setPoint) pwm++;
 
-    if (random(100) < 30) {
-        setPWM();
-    }
+    analogWrite(MOTORA1, pwm);
+
+    counter = 0;
 
     delay(500);
 }
