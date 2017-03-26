@@ -33,8 +33,14 @@ void setup() {
 }
 
 int setPoint = 15;
+float P = 3.0;
+float sumErr = 0;
 
 void loop() {
+    int err = setPoint - counter;
+
+    sumErr += err;
+
     Serial.print("SP:");
     Serial.print(setPoint);
     Serial.print(",");
@@ -42,11 +48,15 @@ void loop() {
     Serial.print(pwm);
     Serial.print(",");
     Serial.print("counter:");
-    Serial.println(counter);
+    Serial.print(counter);
+    Serial.print(",");
+    Serial.print("err:");
+    Serial.print(err);
+    Serial.print(",");
+    Serial.print("sumErr:");
+    Serial.println(sumErr);
 
-    int err = setPoint - counter;
-
-    pwm += err;
+    pwm += P*err + sumErr;
 
     analogWrite(MOTORA1, pwm);
 
