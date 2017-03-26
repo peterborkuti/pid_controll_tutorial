@@ -36,11 +36,7 @@ int setPoint = 15;
 float P = 3.0;
 float sumErr = 0;
 
-void loop() {
-    int err = setPoint - counter;
-
-    sumErr += err;
-
+void print(int err) {
     Serial.print("SP:");
     Serial.print(setPoint);
     Serial.print(",");
@@ -55,6 +51,24 @@ void loop() {
     Serial.print(",");
     Serial.print("sumErr:");
     Serial.println(sumErr);
+}
+
+void readNewSetpoint() {
+    if (Serial.available()) {
+        setPoint = Serial.parseFloat();
+        while (Serial.available()) {Serial.read();};
+    }
+}
+
+void loop() {
+    readNewSetpoint();
+
+    int err = setPoint - counter;
+
+    if (err == 0) { sumErr = 0;}
+    sumErr += err;
+
+    print(err);
 
     pwm += P*err + sumErr;
 
