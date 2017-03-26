@@ -57,6 +57,7 @@ void readNewSetpoint() {
     if (Serial.available()) {
         setPoint = Serial.parseFloat();
         while (Serial.available()) {Serial.read();};
+        sumErr = 0;
     }
 }
 
@@ -71,10 +72,12 @@ void loop() {
     print(err);
 
     pwm += P*err + sumErr;
+    if (pwm > 255) pwm = 255;
+    if (pwm < 0) pwm = 0;
 
     analogWrite(MOTORA1, pwm);
 
     counter = 0;
 
-    delay(500);
+    delay(100);
 }
